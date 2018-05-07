@@ -23,7 +23,7 @@ class UserTableSeeder extends Seeder
             "business_email" => "jhondoe@empresarial.com",
             "position" => "desarrollador",
             "password" => "pass",
-            "access_level" => "desarrollador",
+            "access_level" => "admin",
             "status" => "activo"
         ]);
 
@@ -36,8 +36,23 @@ class UserTableSeeder extends Seeder
             "business_email" => "pesroperez@empresarial.com",
             "position" => "lider",
             "password" => "pass",
+            "access_level" => "superAdmin",
+            "status" => "activo"
+        ]);
+
+        factory(User::class, 5)->create([
             "access_level" => "lider",
             "status" => "activo"
+        ]);
+
+        factory(User::class, 10)->create([
+            "access_level" => "desarrollador",
+            "status" => "activo"
+        ]);
+
+        factory(User::class, 2)->create([
+            "access_level" => "desarrollador",
+            "status" => "inactivo"
         ]);
 
     }

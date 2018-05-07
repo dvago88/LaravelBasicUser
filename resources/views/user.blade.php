@@ -17,8 +17,8 @@
     <p>{{{$user->position }}}</p>
     <h3>Estado</h3>
     <p>{{{$user->status }}}</p>
-    <button>Editar</button>
-    <button>Inactivar</button>
+    <a href="/user/{{{$user->id}}}/edit" class="btn btn-primary">Editar</a>
+    <button class="btn btn-primary">Inactivar</button>
 @stop
 @section("javascript")
     <script src="{{{asset('js/user.js')}}}"></script>

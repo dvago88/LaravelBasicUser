@@ -23,7 +23,26 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($accion = "crear", $id = 0)
+    {
+        if ($accion == "crear") {
+            return view("user_form", ["accion" => "Crear"]);
+        }
+        if ($accion == "actualizar") {
+            $user = User::find($id);
+            return view("user_form", ["user" => $user, "accion" => "Actualizar"]);
+
+        }
+        return Redirect::to('/')->with('message', "Parametro $accion no reconocido");
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
     {
         $user = new User();
         $user->name = Input::get("nombre");
@@ -43,17 +62,6 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        return "Not ready yet";
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  int $id
@@ -69,11 +77,10 @@ class UserController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        return "Not ready yet";
+        return $this->create("actualizar", $id);
     }
 
     /**
@@ -101,13 +108,6 @@ class UserController extends Controller
 
     public function form($accion)
     {
-        if ($accion == "crear") {
 
-            return view("user_form", ["accion" => "Crear"]);
-        }
-        if ($accion == "actualizar") {
-            return view("user_form", ["accion" => "Actualizar"]);
-        }
-        return Redirect::to('/')->with('message', "Parametro $accion no reconocido");
     }
 }
