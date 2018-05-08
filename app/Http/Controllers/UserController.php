@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundException;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
 
 class UserController extends Controller
 {
@@ -31,9 +34,8 @@ class UserController extends Controller
         if ($accion == "actualizar") {
             $user = User::find($id);
             return view("user_form", ["user" => $user, "accion" => "Actualizar"]);
-
         }
-        return Redirect::to('/')->with('message', "Parametro $accion no reconocido");
+        return Redirect::to('/user')->with('message', "Parametro $accion no reconocido");
     }
 
     /**
@@ -48,7 +50,7 @@ class UserController extends Controller
         $user->name = Input::get("nombre");
         $user->lastname = Input::get("primer_apellido");
         $user->second_lastname = Input::get("segundo_apellido");
-        $user->brith_date = Input::get("fecha_nacimiento");
+        $user->birth_date = Input::get("fecha_nacimiento");
         $user->cellphone = Input::get("celular");
         $user->personal_email = Input::get("correo_personal");
         $user->business_email = Input::get("correo_empresarial");
@@ -58,7 +60,8 @@ class UserController extends Controller
         $user->status = "activo";
         $user->save();
 
-        return Redirect::route('home');
+        return $this->index();
+//        return Redirect::route('user.index');
     }
 
     /**
@@ -69,8 +72,12 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
-        return view('user', ["user" => $user]);
+        try {
+            $user = User::findOrFail($id);
+            return view('user', ["user" => $user]);
+        } catch (ModelNotFoundException $e) {
+            return view("user", ["id" => $id]);
+        }
     }
 
     /**

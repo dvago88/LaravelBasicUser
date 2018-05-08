@@ -2,7 +2,8 @@
 @section("title","Formulario")
 
 @section("content")
-    <form action="/user" method="post">
+    <form action={{route("user.store")}} method="post">
+        {!! csrf_field() !!}
         <div class="form-group">
             <label for="nombre">Nombre</label>
             <input type="text" @if(!empty($user)) value="{{{$user->name}}}" @endif class="form-control" id="nombre"
@@ -52,7 +53,7 @@
             <input type="text" class="form-control" id="contraseña" name="contraseña" placeholder="Contraseña">
         </div>
         <div class="form-group">
-            <label for="nivel_acceso">Nivel de Accesp</label>
+            <label for="nivel_acceso">Nivel de Acceso</label>
             <input type="text" @if(!empty($user)) value="{{{$user->access_level}}}" @endif class="form-control"
                    id="nivel_acceso" name="nivel_acceso" placeholder="Nivel De Acceso">
         </div>
@@ -68,5 +69,6 @@
             <label class="form-check-label" for="inactivo"> Inactivo </label>
         </div>
         <button type="submit" class="btn btn-primary">{{{$accion}}}</button>
+        <a href={{route("user.index")}} class="btn btn-primary">Volver al Menú</a>
     </form>
 @stop

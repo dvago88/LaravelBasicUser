@@ -5,7 +5,7 @@
 @stop
 @section("content")
     <h1>Equipo de Trabajo</h1>
-    <a class="btn btn-primary" href="/user/form/crear">Nuevo Miembro</a>
+    <a class="btn btn-primary" href="/user/create">Nuevo Miembro</a>
     <form class="form-inline" action="#">
         <input type="text">
         <button>Buscar</button>
@@ -29,13 +29,13 @@
             @foreach($users as $user)
                 <tr>
                     <td>{{{$user->id}}}</td>
-                    <td><a href="/user/"
-                           class="personProfileLink">{{{$user->name}}} {{{$user->lastname}}} {{{$user->second_lastname}}}</a>
+                    <td>
+                        <a href={{ route("user.show",["id"=>$user->id]) }}>{{{$user->name}}} {{{$user->lastname}}} {{{$user->second_lastname}}}</a>
                     </td>
                     <td>{{{$user->position}}}</td>
                     <td>{{{$user->status}}}</td>
                     <td>
-                        <a href="/user/{{{$user->id}}}/edit" class="btn btn-primary">Editar</a>
+                        <a href={{route("user.edit",["id"=>$user->id])}} class="btn btn-primary">Editar</a>
                         @if($user->status==="activo")
                             <button class="btn btn-primary">Inactivar</button>
                         @else

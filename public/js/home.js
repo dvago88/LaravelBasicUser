@@ -1,3 +1,4 @@
+/*
 let $table = $("table");
 $table.on("click", ".personProfileLink", (event) => {
     let $id = $(event.target).parent().siblings()[0].textContent;
@@ -5,3 +6,4 @@ $table.on("click", ".personProfileLink", (event) => {
     $(event.target).attr("href", event.target.href + $id);
 });
 
+*/

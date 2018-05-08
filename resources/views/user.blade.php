@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="{{{asset('css/user.css')}}}">
 @stop
 @section("content")
+    @if(!empty($user))
     <h1>{{{$user->name}}} {{{ $user->lastname }}} {{{ $user->second_lastname }}}</h1>
     <h3>Fecha de Nacimiento</h3>
     <p>{{{$user->birth_date }}}</p>
@@ -19,6 +20,9 @@
     <p>{{{$user->status }}}</p>
     <a href="/user/{{{$user->id}}}/edit" class="btn btn-primary">Editar</a>
     <button class="btn btn-primary">Inactivar</button>
+        @else
+        <h1>No se encuentra usuario asociado con el codigo {{{$id}}}</h1>
+    @endif
 @stop
 @section("javascript")
     <script src="{{{asset('js/user.js')}}}"></script>
