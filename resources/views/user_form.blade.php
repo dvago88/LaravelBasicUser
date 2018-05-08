@@ -4,6 +4,7 @@
 @section("content")
     <form action={{route("user.store")}} method="post">
         {!! csrf_field() !!}
+        <input type="hidden" @if(!empty($user)) value="{{{$user->id}}}" @else value="0"@endif name="id">
         <div class="form-group">
             <label for="nombre">Nombre</label>
             <input type="text" @if(!empty($user)) value="{{{$user->name}}}" @endif class="form-control" id="nombre"
@@ -50,7 +51,8 @@
         </div>
         <div class="form-group">
             <label for="contraseña">Contraseña</label>
-            <input type="text" class="form-control" id="contraseña" name="contraseña" placeholder="Contraseña">
+            <input type="password" @if(!empty($user)) value="{{{$user->password}}}" @endif class="form-control"
+                   id="contraseña" name="contraseña" placeholder="Contraseña">
         </div>
         <div class="form-group">
             <label for="nivel_acceso">Nivel de Acceso</label>

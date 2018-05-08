@@ -36,11 +36,14 @@
                     <td>{{{$user->status}}}</td>
                     <td>
                         <a href={{route("user.edit",["id"=>$user->id])}} class="btn btn-primary">Editar</a>
+                        <form action={{route("user.changestatus")}} method="post">
+                            <input type="hidden" value="{{{$user->id}}}" name="id">
                         @if($user->status==="activo")
-                            <button class="btn btn-primary">Inactivar</button>
+                            <button type="button" class="btn btn-primary inactivar">Inactivar</button>
                         @else
-                            <button class="btn btn-primary">Activar</button>
+                            <button type="button" class="btn btn-primary activar">Activar</button>
                         @endif
+                        </form>
                     </td>
                 </tr>
             @endforeach

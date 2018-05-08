@@ -21,6 +21,7 @@ class User extends Model
         "business_email",
         "position",
         'password',
+        "status"
     ];
 
     /**

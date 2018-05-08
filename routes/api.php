@@ -1,18 +1,17 @@
 <?php
 
+use App\Model\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('/user/changestatus', function (Request $request) {
+    $user = User::find($request->id);
+    if($user->status=="activo"){
+        $user->status = "inactivo";
+    }else{
+        $user->status = "activo";
+    }
+    $user->save();
+    return $user->status;
+})->name("user.changestatus");
