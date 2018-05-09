@@ -22,7 +22,7 @@ class UserTableSeeder extends Seeder
             "personal_email" => "jhondoe@personal.com",
             "business_email" => "jhondoe@empresarial.com",
             "position" => "desarrollador",
-            "password" => "pass",
+            "password" => bcrypt("pass"),
             "access_level" => "admin",
             "status" => "activo"
         ]);
@@ -35,7 +35,7 @@ class UserTableSeeder extends Seeder
             "personal_email" => "pedroperez@personal.com",
             "business_email" => "pesroperez@empresarial.com",
             "position" => "lider",
-            "password" => "pass",
+            "password" => bcrypt("pass"),
             "access_level" => "superAdmin",
             "status" => "activo"
         ]);

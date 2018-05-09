@@ -8,6 +8,7 @@
         <h1>{{{$user->name}}} {{{ $user->lastname }}} {{{ $user->second_lastname }}}</h1>
         <h3>Fecha de Nacimiento</h3>
         <p>{{{$user->birth_date }}}</p>
+        <p>{{{$user->password}}}</p>
         <h3>Celular</h3>
         <p>{{{$user->cellphone }}}</p>
         <h3>Correo Personal</h3>
@@ -17,7 +18,7 @@
         <h3>Cargo</h3>
         <p>{{{$user->position }}}</p>
         <h3>Estado</h3>
-        <p>{{{$user->status }}}</p>
+        <p id="{{{$user->id}}}status">{{{$user->status }}}</p>
         <a href="/user/{{{$user->id}}}/edit" class="btn btn-primary">Editar</a>
         <form action={{route("user.changestatus")}} method="post">
             <input type="hidden" value="{{{$user->id}}}" name="id">

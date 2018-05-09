@@ -18,9 +18,11 @@ $(document).ready(function () {
             success: function (result) {
                 if (result === "inactivo") {
                     $(e.target).text("Activar");
+                    $("#" + $id + "status").text("Inactivo");
                 } else if (result === "activo") {
                     $(e.target).text("Inactivar");
-                }else{
+                    $("#" + $id + "status").text("Activo");
+                } else {
                     console.log("Error al activar usuario");
                 }
             }
