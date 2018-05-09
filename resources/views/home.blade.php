@@ -32,17 +32,17 @@
                     <td>
                         <a href={{ route("user.show",["id"=>$user->id]) }}>{{{$user->name}}} {{{$user->lastname}}} {{{$user->second_lastname}}}</a>
                     </td>
-                    <td>{{{$user->position}}}</td>
-                    <td id="{{{$user->id}}}status">{{{$user->status}}}</td>
+                    <td>{{{ucfirst($user->position)}}}</td>
+                    <td id="{{{$user->id}}}status">{{{ucfirst($user->status)}}}</td>
                     <td>
                         <a href={{route("user.edit",["id"=>$user->id])}} class="btn btn-primary">Editar</a>
                         <form action={{route("user.changestatus")}} method="post">
                             <input type="hidden" value="{{{$user->id}}}" name="id">
-                        @if($user->status==="activo")
-                            <button type="button" class="btn btn-primary inactivar">Inactivar</button>
-                        @else
-                            <button type="button" class="btn btn-primary inactivar">Activar</button>
-                        @endif
+                            @if($user->status==="activo")
+                                <button type="button" class="btn btn-primary inactivar">Inactivar</button>
+                            @else
+                                <button type="button" class="btn btn-primary inactivar">Activar</button>
+                            @endif
                         </form>
                     </td>
                 </tr>
