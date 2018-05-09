@@ -25,7 +25,7 @@
             @if($user->status==="activo")
                 <button type="button" class="btn btn-primary inactivar">Inactivar</button>
             @else
-                <button type="button" class="btn btn-primary activar">Activar</button>
+                <button type="button" class="btn btn-primary inactivar">Activar</button>
             @endif
         </form>
     @else
