@@ -31,6 +31,7 @@
     @else
         <h1>No se encuentra usuario asociado con el codigo {{{$id}}}</h1>
     @endif
+    <a href={{route("user.index")}} class="btn btn-primary">Volver al Menú</a>
 @stop
 @section("javascript")
     <script src="{{{asset('js/home.js')}}}"></script>

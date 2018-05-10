@@ -57,7 +57,6 @@ class UserTest extends TestCase
     /** @test */
     public function formPostCreatesNewUser()
     {
-//        $this->withExceptionHandling();
 
         $this->from(route("user.index"))->post("/user", [
             "id" => 0,
@@ -87,6 +86,8 @@ class UserTest extends TestCase
 //        $this->assertCredentials(["password" => "55555"]);
     }
 
+//    TODO: Make tests for the other fields required
+
     /** @test */
     public function nameIsRequired()
     {
@@ -110,8 +111,6 @@ class UserTest extends TestCase
     /** @test */
     public function editUserWorks()
     {
-
-
         $user = factory(User::class)->create([
             "name" => "Jhon",
             "lastname" => "Doe",
@@ -150,6 +149,7 @@ class UserTest extends TestCase
     /** @test */
     public function changePasswordWorks()
     {
+        $this->withoutExceptionHandling();
 
         $user = factory(User::class)->create([
             "password" => bcrypt("pass"),
@@ -183,6 +183,8 @@ class UserTest extends TestCase
     /** @test */
     public function changePasswordWithWrongPasswordWontWork()
     {
+        $this->withoutExceptionHandling();
+
         $user = factory(User::class)->create([
             "password" => bcrypt("pass"),
             "access_level" => "admin",
@@ -211,5 +213,31 @@ class UserTest extends TestCase
         $this->assertTrue(!$samePass);
         $samePass = Hash::check('pass', $userUpdated->password);
         $this->assertTrue($samePass);
+    }
+
+    /** @test */
+    public function nameIsRequiredWhenUpdating()
+    {
+
+        $user = factory(User::class)->create([
+            "name" => "Jhon",
+            "lastname" => "Doe",
+            "second_lastname" => "Smith",
+            "access_level" => "admin",
+            "status" => "activo"
+        ]);
+
+        $this->from(route("user.edit", ["id" => $user->id]))->put("/user/$user->id", [
+            "fecha_nacimiento" => "2000-01-01",
+            "celular" => 555555555,
+            "correo_personal" => "test@test.com",
+            "correo_empresarial" => "test01@test01.com",
+            "cargo" => "desarrollador",
+            "contraseña" => bcrypt("55555"),
+            "nivel_acceso" => "superAdmin",
+        ])->assertRedirect(route("user.edit", ["id" => $user->id]))
+            ->assertSessionHasErrors(["nombre"]);
+
+        $this->assertDatabaseMissing("users", ["name" => "name01"]);
     }
 }

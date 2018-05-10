@@ -35,9 +35,21 @@ class UserController extends Controller
     public function store()
     {
         $data = request()->validate([
-            "nombre" => "required"
+            "id" => "",
+            "nombre" => "required",
+            "primer_apellido" => "required|max:35",
+            "segundo_apellido" => "max:35",
+            "fecha_nacimiento" => "required",
+            "celular" => "required|unique:users,cellphone",
+            "correo_personal" => "required|unique:users,personal_email|email|max:70",
+            "correo_empresarial" => "required|unique:users,business_email|email|max:70",
+            "cargo" => "required|max:70",
+            "contraseña" => "required|min:6",
+            "nivel_acceso" => "required",
+        ], [
+            "nombre.required" => "El nombre es obligatorio"
+//            TODO: Finish this messages
         ]);
-        $data = request()->all();
 
         if ($data["id"] == 0) {
             $user = new User();
@@ -69,6 +81,7 @@ class UserController extends Controller
         return redirect()->route("user.index");
     }
 
+
     public function show($id)
     {
         try {
@@ -86,11 +99,27 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        $data = request()->validate([
+            "id" => "",
+            "nombre" => "required",
+            "primer_apellido" => "required|max:35",
+            "segundo_apellido" => "max:35",
+            "fecha_nacimiento" => "required",
+            "celular" => "required|unique:users,cellphone,$id",
+            "correo_personal" => "required|unique:users,personal_email,$id|email|max:70",
+            "correo_empresarial" => "required|unique:users,business_email,$id|email|max:70",
+            "cargo" => "required|max:70",
+            "contraseñaAntigua" => "",
+            "contraseña" => "",
+            "contraseñaRevisador" => "",
+            "nivel_acceso" => "required",
+        ]);
+        $user = User::find($id);
 
-        $data = request()->all();
-        $user = User::find($data["id"]);
+
         try {
             $password = $this->changePassword($user, $data["contraseñaAntigua"], $data["contraseña"], $data["contraseñaRevisador"]);
+
         } catch (ErrorException $e) {
             $password = $user->password;
         }
@@ -106,9 +135,7 @@ class UserController extends Controller
         $user->password = $password;
         $user->access_level = $data["nivel_acceso"];
         $user->status = "activo";
-
-        $user->save();
-
+        $user->update();
 
         return redirect()->route("user.index");
     }

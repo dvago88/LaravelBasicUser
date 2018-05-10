@@ -35,7 +35,8 @@
                     <td>{{{ucfirst($user->position)}}}</td>
                     <td id="{{{$user->id}}}status">{{{ucfirst($user->status)}}}</td>
                     <td>
-                        <a href={{route("user.edit",["id"=>$user->id])}} class="btn btn-primary">Editar</a>
+                        {{--<a href={{route("user.edit",["id"=>$user->id])}} class="btn btn-primary">Editar</a>--}}
+                        <a href={{route("user.edit",["user"=>$user])}} class="btn btn-primary">Editar</a>
                         <form action={{route("user.changestatus")}} method="post">
                             <input type="hidden" value="{{{$user->id}}}" name="id">
                             @if($user->status==="activo")
