@@ -5,10 +5,19 @@
 @stop
 @section("content")
     @if(!empty($user))
+        @if(session()->has("passwordFail"))
+            <div class="alert alert-danger" role="alert">
+                {{{session()->get("passwordFail")}}}
+            </div>
+        @endif
+        @if(session()->has("passwordSuccess"))
+            <div class="alert alert-success" role="alert">
+                {{{session()->get("passwordSuccess")}}}
+            </div>
+        @endif
         <h1>{{{$user->name}}} {{{ $user->lastname }}} {{{ $user->second_lastname }}}</h1>
         <h3>Fecha de Nacimiento</h3>
         <p>{{{$user->birth_date }}}</p>
-        <p>{{{$user->password}}}</p>
         <h3>Celular</h3>
         <p>{{{$user->cellphone }}}</p>
         <h3>Correo Personal</h3>
@@ -19,7 +28,14 @@
         <p>{{{$user->position }}}</p>
         <h3>Estado</h3>
         <p id="{{{$user->id}}}status">{{{$user->status }}}</p>
-        <a href="/user/{{{$user->id}}}/edit" class="btn btn-primary">Editar</a>
+        <a href="{{route("user.edit",$user)}}" class="btn btn-primary">Editar</a>
+        <form action="{{route("user.destroy",$user)}}" method="post"
+              onsubmit="return confirm('Realmente quieres eliminar este miembro? \nEsta acción no se puede deshacer');">
+            {{method_field("DELETE")}}
+            {!! csrf_field() !!}
+            <button type="submit" class="btn btn-danger">Eliminar
+            </button>
+        </form>
         <form action={{route("user.changestatus")}} method="post">
             <input type="hidden" value="{{{$user->id}}}" name="id">
             @if($user->status==="activo")

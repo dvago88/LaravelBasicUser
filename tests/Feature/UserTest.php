@@ -57,6 +57,8 @@ class UserTest extends TestCase
     /** @test */
     public function formPostCreatesNewUser()
     {
+        $this->withoutExceptionHandling();
+
 
         $this->from(route("user.index"))->post("/user", [
             "id" => 0,
@@ -67,7 +69,8 @@ class UserTest extends TestCase
             "correo_personal" => "test@test.com",
             "correo_empresarial" => "test01@test01.com",
             "cargo" => "desarrollador",
-            "contraseña" => bcrypt("55555"),
+            "contraseña" => "555555",
+            "contraseñaRevisador" => "555555",
             "nivel_acceso" => "superAdmin",
         ])->assertRedirect(route("user.index"));
 
@@ -131,7 +134,7 @@ class UserTest extends TestCase
             "estado" => "activo",
             "nivel_acceso" => "admin"
 
-        ])->assertRedirect(route("user.index"));
+        ])->assertRedirect(route("user.show", $user));
 
         $this->assertDatabaseHas("users", [
             "id" => $user->id,
@@ -168,14 +171,14 @@ class UserTest extends TestCase
             "correo_empresarial" => $user->business_email,
             "cargo" => $user->position,
             "contraseñaAntigua" => "pass",
-            "contraseña" => "perro",
-            "contraseñaRevisador" => "perro",
+            "contraseña" => "perros",
+            "contraseñaRevisador" => "perros",
             "nivel_acceso" => $user->access_level,
-        ])->assertRedirect(route("user.index"));
+        ])->assertRedirect(route("user.show", $user));
 
         $userUpdated = User::find($user->id);
 
-        $samePass = Hash::check('perro', $userUpdated->password);
+        $samePass = Hash::check('perros', $userUpdated->password);
         $this->assertTrue($samePass);
     }
 
@@ -202,14 +205,14 @@ class UserTest extends TestCase
             "correo_empresarial" => $user->business_email,
             "cargo" => $user->position,
             "contraseñaAntigua" => "passo",
-            "contraseña" => "perro",
-            "contraseñaRevisador" => "perro",
+            "contraseña" => "perros",
+            "contraseñaRevisador" => "perros",
             "nivel_acceso" => $user->access_level,
-        ])->assertRedirect(route("user.index"));
+        ])->assertRedirect(route("user.show", $user));
 
         $userUpdated = User::find($user->id);
 
-        $samePass = Hash::check('perro', $userUpdated->password);
+        $samePass = Hash::check('perros', $userUpdated->password);
         $this->assertTrue(!$samePass);
         $samePass = Hash::check('pass', $userUpdated->password);
         $this->assertTrue($samePass);
@@ -240,4 +243,19 @@ class UserTest extends TestCase
 
         $this->assertDatabaseMissing("users", ["name" => "name01"]);
     }
+
+    /** @test */
+    public function it_deletes_user()
+    {
+        $user = factory(User::class)->create([
+            "access_level" => "admin",
+            "status" => "activo"
+        ]);
+
+        $this->delete(route("user.destroy", ["id" => $user->id]))->assertRedirect(route("user.index"));
+        $this->assertDatabaseMissing("users", ["id" => $user->id]);
+        $this->assertSame(0, User::count());
+    }
+
+
 }

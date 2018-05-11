@@ -45,23 +45,20 @@ class UserController extends Controller
             "correo_empresarial" => "required|unique:users,business_email|email|max:70",
             "cargo" => "required|max:70",
             "contraseña" => "required|min:6",
+            "contraseñaRevisador" => "required|min:6",
             "nivel_acceso" => "required",
         ], [
             "nombre.required" => "El nombre es obligatorio"
 //            TODO: Finish this messages
         ]);
 
-        if ($data["id"] == 0) {
-            $user = new User();
-            $password = bcrypt($data["contraseña"]);
-        } else {
-            $user = User::find($data["id"]);
-            try {
-                $password = $this->changePassword($user, $data["contraseñaAntigua"], $data["contraseña"], $data["contraseñaRevisador"]);
-            } catch (ErrorException $e) {
-                $password = $user->password;
-            }
+        if ($data["contraseña"] != $data["contraseñaRevisador"]) {
+            session()->flash("passwordDifferent", "Contraseñas no pueden ser diferentes");
+            return Redirect::back()->withInput($data)->withErrors([]);
         }
+
+        $user = new User();
+        $password = bcrypt($data["contraseña"]);
         $user->name = $data["nombre"];
         $user->lastname = $data["primer_apellido"];
 //        $user->second_lastname = $data["segundo_apellido"]; //the tests wont pass like this...
@@ -111,7 +108,7 @@ class UserController extends Controller
             "cargo" => "required|max:70",
             "contraseñaAntigua" => "",
             "contraseña" => "",
-            "contraseñaRevisador" => "",
+            "contraseñaRevisador" => "min:6",
             "nivel_acceso" => "required",
         ]);
         $user = User::find($id);
@@ -137,26 +134,25 @@ class UserController extends Controller
         $user->status = "activo";
         $user->update();
 
-        return redirect()->route("user.index");
+        return redirect()->route("user.show", $user);
     }
 
     public function destroy($id)
     {
-        return "Not ready yet";
+        User::find($id)->delete();
+        return redirect()->route("user.index");
     }
 
-    public function form($accion)
-    {
-
-    }
 
     private function changePassword($user, $oldP, $newP, $newPChecker)
     {
         $passwordIsOk = password_verify($oldP, $user->password);
 
         if ($passwordIsOk && rtrim(trim($newP)) == rtrim(trim($newPChecker)) && rtrim(trim($newP)) != "") {
+            session()->flash("passwordSuccess", "Contraseña actualizada correctamente");
             return bcrypt($newP);
         }
+        session()->flash("passwordFail", "Contraseña No actualizada");
         return $user->password;
     }
 }

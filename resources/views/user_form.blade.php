@@ -4,9 +4,13 @@
     <link rel="stylesheet" href="{{{asset('css/form.css')}}}">
 @stop
 @section("content")
-    @if($errors->any())
+    @if($errors->any() || session()->has("errors"))
         <div class="alert alert-danger" role="alert">
             Hay campos con errores
+        </div> @endif
+    @if($errors->has("contraseñaRevisador"))
+        <div class="alert alert-danger" role="alert">
+            La contraseña es muy corta
         </div> @endif
     @if(!empty($user))
         <form action={{route("user.update",["id"=>$user->id])}} method="post">
@@ -16,7 +20,8 @@
                 <form action={{route("user.store")}} method="post">
                     @endif
                     {!! csrf_field() !!}
-                    <input type="hidden" @if(!empty($user)) value="{{{$user->id}}}" @else value="0" @endif name="id">
+                    <input type="hidden" @if(!empty($user)) value="{{{$user->id}}}" @else value="0"
+                           @endif name="id">
                     <div id="user_inputs">
                         <div class="form-group">
                             <label for="nombre">Nombre</label>
@@ -59,7 +64,8 @@
                         </div>
                         <div class="form-group">
                             <label for="celular">Celular</label>
-                            <input type="number" class="form-control" name="celular" id="celular" placeholder="Celular"
+                            <input type="number" class="form-control" name="celular" id="celular"
+                                   placeholder="Celular"
                                    @if(!empty($user)) value="{{{$user->cellphone}}}"
                                    @else value="{{{old('celular')}}}" @endif>
                             @if($errors->has("celular"))
@@ -78,7 +84,8 @@
                         </div>
                         <div class="form-group">
                             <label for="correo_empresarial">Correo Empresarial</label>
-                            <input type="text" class="form-control" id="correo_empresarial" name="correo_empresarial"
+                            <input type="text" class="form-control" id="correo_empresarial"
+                                   name="correo_empresarial"
                                    placeholder="Correo Empresarial"
                                    @if(!empty($user)) value="{{{$user->business_email}}}"
                                    @else value="{{{old('correo_empresarial')}}}" @endif>
@@ -91,8 +98,14 @@
                                 <label for="contraseña">Contraseña</label>
                                 <input type="password" class="form-control" id="contraseña" name="contraseña"
                                        placeholder="Escribe la Contraseña">
+                                <input type="password" class="form-control" id="contraseñaRevisador"
+                                       name="contraseñaRevisador"
+                                       placeholder="Escribe la Contraseña de nuevo">
                                 @if($errors->has("contraseña"))
                                     <p class="validation_error">{{{$errors->first("contraseña")}}}</p>
+                                @endif
+                                @if(session()->has("passwordDifferent"))
+                                    <p class="validation_error">{{{session()->get("passwordDifferent")}}}</p>
                                 @endif
                             </div>
                         @endif
@@ -101,8 +114,8 @@
                             <input type="text" class="form-control" id="cargo" name="cargo" placeholder="Cargo"
                                    @if(!empty($user)) value="{{{$user->position}}}"
                                    @else value="{{{old('cargo')}}}" @endif>
-                            @if($errors->has("contraseña"))
-                                <p class="validation_error">{{{$errors->first("contraseña")}}}</p>
+                            @if($errors->has("cargo"))
+                                <p class="validation_error">{{{$errors->first("cargo")}}}</p>
                             @endif
                         </div>
                         <div class="form-group">
@@ -122,7 +135,8 @@
                             <label class="form-check-label" for="activo"> Activo </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="inactivo" id="inactivo" value="inactivo"
+                            <input class="form-check-input" type="radio" name="inactivo" id="inactivo"
+                                   value="inactivo"
                                    @if(!empty($user) && $user->status=="inactivo") checked @endif>
                             <label class="form-check-label" for="inactivo"> Inactivo </label>
                         </div>
@@ -130,7 +144,8 @@
                     <button type="submit" class="btn btn-primary">{{{$accion}}}</button>
                     <a href={{route("user.index")}} class="btn btn-primary">Volver al Menú</a>
                     @if(!empty($user))
-                        <button type="button" class="btn btn-primary" id="change_password">Cambiar contraseña</button>
+                        <button type="button" class="btn btn-primary" id="change_password">Cambiar contraseña
+                        </button>
                     @endif
                 </form>
                 @stop
