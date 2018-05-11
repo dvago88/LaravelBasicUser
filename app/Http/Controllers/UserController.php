@@ -130,7 +130,7 @@ class UserController extends Controller
         $user->business_email = $data["correo_empresarial"];
         $user->position = $data["cargo"];
         $user->password = $password;
-        $user->access_level = $data["nivel_acceso"];
+        $user->access_level = strtolower($data["nivel_acceso"]);
         $user->status = "activo";
         $user->update();
 
