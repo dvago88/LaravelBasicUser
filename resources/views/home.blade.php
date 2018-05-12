@@ -11,6 +11,8 @@
         <button>Buscar</button>
     </form>
 
+
+
     <div>
         <div>
             <h3>Filtar por</h3>
@@ -30,7 +32,8 @@
                 <tr>
                     <td>{{{$user->id}}}</td>
                     <td>
-                        <a href={{ route("user.show",["id"=>$user->id]) }}>{{{$user->name}}} {{{$user->lastname}}} {{{$user->second_lastname}}}</a>
+                        {{$user->getName()}}
+                        <a href={{ route("user.show",["id"=>$user->id]) }}>{{$user->getName()}}</a>
                     </td>
                     <td>{{{ucfirst($user->position)}}}</td>
                     <td id="{{{$user->id}}}status">{{{ucfirst($user->status)}}}</td>

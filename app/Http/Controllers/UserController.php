@@ -32,7 +32,7 @@ class UserController extends Controller
     }
 
 
-    public function store()
+    public function store(Request $request)
     {
         $data = request()->validate([
             "id" => "",
@@ -62,7 +62,8 @@ class UserController extends Controller
         $user->name = $data["nombre"];
         $user->lastname = $data["primer_apellido"];
 //        $user->second_lastname = $data["segundo_apellido"]; //the tests wont pass like this...
-        $user->second_lastname = Input::get("segundo_apellido");
+//        $user->second_lastname = Input::get("segundo_apellido");
+        $user->second_lastname = $request->segundo_apellido;
         $user->birth_date = $data["fecha_nacimiento"];
         $user->cellphone = $data["celular"];
         $user->personal_email = $data["correo_personal"];
@@ -76,6 +77,8 @@ class UserController extends Controller
 
 
         return redirect()->route("user.index");
+
+
     }
 
 

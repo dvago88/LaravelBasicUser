@@ -32,4 +32,9 @@ class User extends Model
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function getName()
+    {
+        return $this->name . " " . $this->lastname . " " . $this->second_lastname;
+    }
 }
