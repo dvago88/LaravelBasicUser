@@ -57,21 +57,21 @@ class UserTest extends TestCase
     /** @test */
     public function formPostCreatesNewUser()
     {
-        $this->withoutExceptionHandling();
+//        $this->withoutExceptionHandling();
 
 
         $this->from(route("user.index"))->post("/user", [
             "id" => 0,
-            "nombre" => "name01",
-            "primer_apellido" => "lastname01",
-            "fecha_nacimiento" => "2000-01-01",
-            "celular" => 555555555,
-            "correo_personal" => "test@test.com",
-            "correo_empresarial" => "test01@test01.com",
-            "cargo" => "desarrollador",
-            "contraseña" => "555555",
-            "contraseñaRevisador" => "555555",
-            "nivel_acceso" => "superAdmin",
+            "name" => "name01",
+            "lastname" => "lastname01",
+            "birth_date" => "2000-01-01",
+            "cellphone" => 555555555,
+            "email" => "test@test.com",
+            "business_email" => "test01@test01.com",
+            "position" => "desarrollador",
+            "password" => "555555",
+            "passwordChecker" => "555555",
+            "access_level" => "superAdmin",
         ])->assertRedirect(route("user.index"));
 
         $this->assertDatabaseHas("users", [
@@ -79,7 +79,7 @@ class UserTest extends TestCase
             "lastname" => "lastname01",
             "birth_date" => "2000-01-01",
             "cellphone" => "555555555",
-            "personal_email" => "test@test.com",
+            "email" => "test@test.com",
             "business_email" => "test01@test01.com",
             "position" => "desarrollador",
             "access_level" => "superAdmin",
@@ -96,16 +96,16 @@ class UserTest extends TestCase
     {
         $this->from(route("user.create"))->post("/user", [
             "id" => 0,
-            "primer_apellido" => "lastname01",
-            "fecha_nacimiento" => "2000-01-01",
-            "celular" => 555555555,
-            "correo_personal" => "test@test.com",
-            "correo_empresarial" => "test01@test01.com",
-            "cargo" => "desarrollador",
-            "contraseña" => bcrypt("55555"),
-            "nivel_acceso" => "superAdmin",
+            "lastname" => "lastname01",
+            "birth_date" => "2000-01-01",
+            "cellphone" => 555555555,
+            "email" => "test@test.com",
+            "business_email" => "test01@test01.com",
+            "position" => "desarrollador",
+            "password" => bcrypt("55555"),
+            "access_level" => "superAdmin",
         ])->assertRedirect(route("user.create"))
-            ->assertSessionHasErrors(["nombre"]);
+            ->assertSessionHasErrors(["name"]);
 
         $this->assertDatabaseMissing("users", ["name" => "name01"]);
     }
@@ -124,15 +124,15 @@ class UserTest extends TestCase
 
         $this->put("/user/$user->id", [
             "id" => $user->id,
-            "nombre" => "name01",
-            "primer_apellido" => "lastname01",
-            "fecha_nacimiento" => "2000-01-01",
-            "celular" => 555555555,
-            "correo_personal" => "test@test.com",
-            "correo_empresarial" => "test01@test01.com",
-            "cargo" => "desarrollador",
-            "estado" => "activo",
-            "nivel_acceso" => "admin"
+            "name" => "name01",
+            "lastname" => "lastname01",
+            "birth_date" => "2000-01-01",
+            "cellphone" => 555555555,
+            "email" => "test@test.com",
+            "business_email" => "test01@test01.com",
+            "position" => "desarrollador",
+            "status" => "activo",
+            "access_level" => "admin"
 
         ])->assertRedirect(route("user.show", $user));
 
@@ -142,7 +142,7 @@ class UserTest extends TestCase
             "lastname" => "lastname01",
             "birth_date" => "2000-01-01",
             "cellphone" => "555555555",
-            "personal_email" => "test@test.com",
+            "email" => "test@test.com",
             "business_email" => "test01@test01.com",
             "position" => "desarrollador",
         ]);
@@ -152,7 +152,7 @@ class UserTest extends TestCase
     /** @test */
     public function changePasswordWorks()
     {
-        $this->withoutExceptionHandling();
+//        $this->withoutExceptionHandling();
 
         $user = factory(User::class)->create([
             "password" => bcrypt("pass"),
@@ -163,17 +163,17 @@ class UserTest extends TestCase
 //        $this->post("/user", [
         $this->put("/user/$user->id", [
             "id" => $user->id,
-            "nombre" => $user->name,
-            "primer_apellido" => $user->lastname,
-            "fecha_nacimiento" => $user->birth_date,
-            "celular" => $user->cellphone,
-            "correo_personal" => $user->personal_email,
-            "correo_empresarial" => $user->business_email,
-            "cargo" => $user->position,
-            "contraseñaAntigua" => "pass",
-            "contraseña" => "perros",
-            "contraseñaRevisador" => "perros",
-            "nivel_acceso" => $user->access_level,
+            "name" => $user->name,
+            "lastname" => $user->lastname,
+            "birth_date" => $user->birth_date,
+            "cellphone" => $user->cellphone,
+            "email" => $user->email,
+            "business_email" => $user->business_email,
+            "position" => $user->position,
+            "oldPassword" => "pass",
+            "password" => "perros",
+            "passwordChecker" => "perros",
+            "access_level" => $user->access_level,
         ])->assertRedirect(route("user.show", $user));
 
         $userUpdated = User::find($user->id);
@@ -186,7 +186,7 @@ class UserTest extends TestCase
     /** @test */
     public function changePasswordWithWrongPasswordWontWork()
     {
-        $this->withoutExceptionHandling();
+//        $this->withoutExceptionHandling();
 
         $user = factory(User::class)->create([
             "password" => bcrypt("pass"),
@@ -197,17 +197,17 @@ class UserTest extends TestCase
 //        $this->post("/user", [
         $this->put("/user/$user->id", [
             "id" => $user->id,
-            "nombre" => $user->name,
-            "primer_apellido" => $user->lastname,
-            "fecha_nacimiento" => $user->birth_date,
-            "celular" => $user->cellphone,
-            "correo_personal" => $user->personal_email,
-            "correo_empresarial" => $user->business_email,
-            "cargo" => $user->position,
-            "contraseñaAntigua" => "passo",
-            "contraseña" => "perros",
-            "contraseñaRevisador" => "perros",
-            "nivel_acceso" => $user->access_level,
+            "name" => $user->name,
+            "lastname" => $user->lastname,
+            "birth_date" => $user->birth_date,
+            "cellphone" => $user->cellphone,
+            "email" => $user->email,
+            "business_email" => $user->business_email,
+            "position" => $user->position,
+            "oldPassword" => "passo",
+            "password" => "perros",
+            "passwordChecker" => "perros",
+            "access_level" => $user->access_level,
         ])->assertRedirect(route("user.show", $user));
 
         $userUpdated = User::find($user->id);
@@ -231,15 +231,15 @@ class UserTest extends TestCase
         ]);
 
         $this->from(route("user.edit", ["id" => $user->id]))->put("/user/$user->id", [
-            "fecha_nacimiento" => "2000-01-01",
-            "celular" => 555555555,
-            "correo_personal" => "test@test.com",
-            "correo_empresarial" => "test01@test01.com",
-            "cargo" => "desarrollador",
-            "contraseña" => bcrypt("55555"),
-            "nivel_acceso" => "superAdmin",
+            "birth_date" => "2000-01-01",
+            "cellphone" => 555555555,
+            "email" => "test@test.com",
+            "business_email" => "test01@test01.com",
+            "position" => "desarrollador",
+            "password" => bcrypt("55555"),
+            "access_level" => "superAdmin",
         ])->assertRedirect(route("user.edit", ["id" => $user->id]))
-            ->assertSessionHasErrors(["nombre"]);
+            ->assertSessionHasErrors(["name"]);
 
         $this->assertDatabaseMissing("users", ["name" => "name01"]);
     }

@@ -2,10 +2,19 @@
 
 namespace App\Model;
 
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 
-class User extends Model
+
+
+class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
+    use Authenticatable, Authorizable, CanResetPassword;
     /**
      * The attributes that are mass assignable.
      *
@@ -17,7 +26,7 @@ class User extends Model
         "second_lastname",
         "bith_date",
         "cellphone",
-        'personal_email',
+        'email',
         "business_email",
         "position",
         'password',

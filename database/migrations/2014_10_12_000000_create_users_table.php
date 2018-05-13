@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string("second_lastname", 35)->nullable();
             $table->date("birth_date");
             $table->bigInteger("cellphone")->unique();
-            $table->string('personal_email',70)->unique();
+            $table->string('email',70)->unique();
             $table->string("business_email", 70)->unique();
             $table->string("position", 70);
             $table->string('password');
